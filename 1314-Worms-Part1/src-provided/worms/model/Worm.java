@@ -1,3 +1,5 @@
+// versie: zondag 9 maart 16:50
+
 package worms.model;
 
 import be.kuleuven.cs.som.annotate.Basic;
