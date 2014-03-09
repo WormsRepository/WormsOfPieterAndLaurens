@@ -295,25 +295,22 @@ public class Worm {
 	}
 	
 	/**
-	 * Checks wether a worm can turn to the given direction or not.
+	 * Checks wether a worm can turn with the given angle.
 	 * 
-	 * @param 	direction
-	 * 			The new direction for the worm.
-	 * @return 	True if and only if the direction is a valid direction and the amount of action points needed 
-	 * 			is smaller than the current amount of action points.
-	 * 			| double result = Math.abs(this.getDirection() - direction)
-				| if(result > Math.PI)
-			    | 	then (result = 2*Math.PI - result)
-	 * 			| isValidDirection(direction) && getCurrentActionPoints() >= result / 2*Math.PI * 60
-	 * 			
+	 * @param 	angle
+	 * 			The angle to check.
+	 * @return 	False if the absolute value of the given angle is bigger than pi or zero.
+	 * 			| if (Math.abs(angle) > Math.PI || angle == 0)
+	 * 			|	then result == false
+	 * 			Otherwise, true if and only if the amount of action points needed for such a turn
+	 * 			is smaller than the curren amount of action points.
+	 * 			| else result == (getCurrentActionPoints() >= angle / (2*Math.PI) * 60)
 	 */
-	public boolean canTurn(double direction) {
-		if(!isValidDirection(direction))
+	public boolean canTurn(double angle) {
+		if(Math.abs(angle) > Math.PI || angle == 0) {
 			return false;
-		double result = Math.abs(this.getDirection() - direction);
-		if(result > Math.PI)
-			result = 2*Math.PI - result;
-		return getCurrentActionPoints() >= result / (2*Math.PI) * 60;
+		}
+		return getCurrentActionPoints() >= angle / (2*Math.PI) * 60;
 	}
 	
 	//TODO documentatie in verband met turn, aanvullen
