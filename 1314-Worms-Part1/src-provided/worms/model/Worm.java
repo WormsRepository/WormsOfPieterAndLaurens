@@ -46,12 +46,11 @@ public class Worm {
 	public Worm(double x, double y, double direction, double radius,String name) 
 			throws IllegalRadiusException, IllegalNameException
 	{
-		this.direction = direction;
+		setDirection(direction);
 		setRadius(radius);
 		setMass(radius);
 		setMaxActionPoints(mass);
 		setName(name);
-		
 	}
 	
 
@@ -287,11 +286,11 @@ public class Worm {
 	 * @param 	direction
 	 * 			The direction to check.
 	 * @return	True if and only if the given direction is not below zero and not above or equal to 2 pi.
-	 * 			| result == ( (getDirection() >= 0) && (getdirection() < 2*Math.PI) )
+	 * 			| result == ( (direction >= 0) && (direction < 2*Math.PI) )
 	 */
 	public boolean isValidDirection(double direction)
 	{
-		return ( (getDirection() >= 0) && (getDirection() < 2*Math.PI) );
+		return ( (direction >= 0) && (direction < 2*Math.PI) );
 	}
 	
 	/**
@@ -318,9 +317,11 @@ public class Worm {
 	 * 
 	 * @param angle
 	 */
-	public void turn(double direction) {
-		// TODO Auto-generated method stub
-		
+	public void turn(double angle) {
+		if(! canTurn(angle))
+			throw new IllegalArgumentException("This is not a valid angle!");
+		direction += angle;
+		//preincrement used correctly?
 	}
 	
 	/**
