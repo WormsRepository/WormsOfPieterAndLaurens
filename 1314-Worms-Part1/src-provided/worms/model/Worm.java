@@ -1,4 +1,4 @@
-// versie: zondag 9 maart 16:50:00
+// versie: zondag 9 maart 16:50
 
 package worms.model;
 
