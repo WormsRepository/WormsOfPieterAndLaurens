@@ -1,4 +1,4 @@
-// versie: zondag 9 maart 16:50
+// versie: maandag 10 maart 10:50
 
 package worms.model;
 
@@ -6,7 +6,7 @@ import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Model;
 import be.kuleuven.cs.som.annotate.Raw;
 
-
+// TODO documentation...
 /**
  * A class of worms involving an x-coordinate, an y-coordinate, a direction in radians, a radius (in meter), a name, a mass (in kilogram),
  *  
@@ -15,7 +15,7 @@ import be.kuleuven.cs.som.annotate.Raw;
 public class Worm {
 	
 	
-	//TODO documentatie constructor aanvullen.
+	//TODO documentatie constructor nakijken
 	/**
 	 * Create a new worm that is positioned at the given location,
 	 * looks in the given direction, has the given radius, the given name,
@@ -185,7 +185,7 @@ public class Worm {
 		//TODO rekening houden met overflow?
 		setY(Math.sin(getDirection()) * getRadius() * nbSteps);
 		
-		int costOfActionPoints = (int)(Math.ceil((Math.cos(getDirection()) + 4*Math.sin(getDirection())) * nbSteps));
+		long costOfActionPoints = (long)(Math.ceil((Math.cos(getDirection()) + 4*Math.sin(getDirection())) * nbSteps));
 		setCurrentActionPoints(getCurrentActionPoints() - costOfActionPoints);
 	}
 	
@@ -308,7 +308,7 @@ public class Worm {
 	}
 	
 	/**
-	 * Checks wether a worm can turn with the given angle.
+	 * Checks whether a worm can turn with the given angle.
 	 * 
 	 * @param 	angle
 	 * 			The angle to check.
@@ -316,7 +316,7 @@ public class Worm {
 	 * 			| if (Math.abs(angle) > Math.PI || angle == 0)
 	 * 			|	then result == false
 	 * 			Otherwise, true if and only if the amount of action points needed for such a turn
-	 * 			is smaller than the curren amount of action points.
+	 * 			is smaller than the current amount of action points.
 	 * 			| else result == (getCurrentActionPoints() >= angle / (2*Math.PI) * 60)
 	 */
 	public boolean canTurn(double angle) {
@@ -325,15 +325,18 @@ public class Worm {
 		}
 		return getCurrentActionPoints() >= angle / (2*Math.PI) * 60;
 	}
-	
-	//TODO documentatie in verband met turn, aanvullen
+
 	/**
+	 * Changes the direction with the given angle.
 	 * 
-	 * @param angle
+	 * @param 	angle
+	 * 			The angle to turn.
+	 * @pre		The worm must be able to turn with the given angle.
+	 * 		    | canTurn(angle)
+	 * @post	The new direction is equal to the old direction incremented with the given angle.
+	 * 			| new.getDirection() == getDirection() + angle
 	 */
 	public void turn(double angle) {
-		if(! canTurn(angle))
-			throw new IllegalArgumentException("This is not a valid angle!");
 		direction += angle;
 		//preincrement used correctly?
 	}
@@ -373,15 +376,20 @@ public class Worm {
 	
 	//TODO methodes op de juiste plaats implementeren
 	
-	//TODO documentatie aanvullen omdat setmass defensief is.
 	/**
 	 * @param	radius
 	 * 			The radius needed for the calculation of the worm's mass.
 	 * @post	The new mass is calculated with the radius and the density.
 	 * 			| new.mass = DENSITY * ((4/3) * Math.PI * Math.pow(radius,3))
+	 * @throws	IllegalRadiusException(radius,this)
+	 * 			The given radius is not a valid radius for this worm.
+	 * 			| !canHaveAsRadius(radius)
 	 */
-	private void setMass(double radius)
+	private void setMass(double radius) 
+			throws IllegalRadiusException
 	{
+		if(! canHaveAsRadius(radius))
+			throw new IllegalRadiusException(radius, this);
 		mass = DENSITY * ((4/3) * Math.PI * Math.pow(radius,3));
 	}
 	
@@ -405,17 +413,17 @@ public class Worm {
 	@Basic @Raw
 	public long getMaxActionPoints()
 	{
-		return maxActionPoints;
+		return this.maxActionPoints;
 	}
 	
 	/**
 	 * set the max action points of this worm according to the given mass.
 	 * 
-	 * @param mass
-	 * @post the new maximum action points is the mass rounded to the nearest integer.
-	 * 		|new.maxActionPoints = Math.round(mass)
+	 * @param 	mass
+	 * @post 	the new maximum action points is the mass rounded to the nearest integer.
+	 * 			| new.maxActionPoints = Math.round(mass)
 	 */
-	public void setMaxActionPoints(double mass)
+	private void setMaxActionPoints(double mass)
 	{
 		maxActionPoints = Math.round(mass);
 	}
@@ -427,21 +435,23 @@ public class Worm {
 	
 	//alle methodes ivm currentActionPoints hier zetten.
 	
-	//TODO documentatie ivm getActionPoints hier zetten
 	/**
-	 * 
-	 * @return
+	 * Return the current amount of action points of this worm.
 	 */
-	public int getCurrentActionPoints() {
-		// TODO Auto-generated method stub
-		return 0;
+	public long getCurrentActionPoints() {
+		return this.currentActionPoints;
 	}
+	
 	/**
+	 * Set the amount of current action points of this worm to the given amount.
 	 * 
-	 * @param newActionPoints
+	 * @param 	newActionPoints
+	 * 			The new amount of current action points for this worm.
+	 * @post	The new amount of current action points is equal to the given amount.
+	 * 			| new.getCurrentActionPoints() == newActionPoints
 	 */
 	@Model
-	private void setCurrentActionPoints(int newActionPoints){
+	private void setCurrentActionPoints(long newActionPoints){
 		this.currentActionPoints = newActionPoints;
 	}
 	
