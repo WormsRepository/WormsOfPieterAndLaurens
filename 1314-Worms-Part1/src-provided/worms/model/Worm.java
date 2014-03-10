@@ -18,7 +18,8 @@ public class Worm {
 	//TODO documentatie constructor aanvullen.
 	/**
 	 * Create a new worm that is positioned at the given location,
-	 * looks in the given direction, has the given radius and the given name.
+	 * looks in the given direction, has the given radius, the given name,
+	 * the right mass and the right maximum amount of action points
 	 * 
 	 * @param	x
 	 * 			The x-coordinate of the position of the new worm (in meter).
@@ -32,6 +33,10 @@ public class Worm {
 	 * 			The name of the new worm
 	 * @pre		The given initial direction must be a valid direction for any worm.
 	 * 		    | isValidDirection(direction)
+	 * @post	The new x coordinate of this new worm is equal to the given x coordinate
+	 * 			| new.getX() == x
+	 * @post	The new y coordinate of this new worm is equal to the given y coordinate
+	 * 			| new.getY() == y
 	 * @post	The new direction of this new worm is equal to the given direction.
 	 * 			| new.getDirection() == direction
 	 * @post	The new radius of this new worm is equal to the given radius.
@@ -44,10 +49,17 @@ public class Worm {
 	 * @throws	IllegalNameException(name,this)
 	 * 			This new worm cannot have the given name as its name.
 	 * 			| !canHaveAsName(name)
+	 * @effect	The mass of this new worm and the maximum amount of action points of this new worm
+	 * 			is set, it depends on the radius of this new worm. There is only a mass and a maximum
+	 * 			amount of action points if the radius is a valid radius for any worm.
+	 * 			| this.setMass(radius)
+	 * 			| this.setMaxActionPoints(mass)
 	 */
 	public Worm(double x, double y, double direction, double radius,String name) 
 			throws IllegalRadiusException, IllegalNameException
 	{
+		setX(x);
+		setY(y);
 		setDirection(direction);
 		setRadius(radius);
 		setMass(radius);
