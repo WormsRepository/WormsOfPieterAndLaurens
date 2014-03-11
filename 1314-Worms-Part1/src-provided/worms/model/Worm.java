@@ -1,4 +1,4 @@
-// versie: maandag 10 maart 13:44
+// versie: dinsdag 11 maart 21:50
 
 package worms.model;
 
@@ -150,7 +150,7 @@ public class Worm {
 		return 0;
 	}
 	
-	//TODO documentatie van jump aanvullen
+//right exception?
 	/**
 	 * Change the position of the worm as the result of a jump from the current position 
 	 * and with respect to the worm's orientation and the number of remaining action points.
