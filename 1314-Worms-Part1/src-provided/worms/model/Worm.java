@@ -1,4 +1,4 @@
-// versie: dinsdag 11 maart 22:40
+// versie: woensdag 12 maart 00:05
 
 package worms.model;
 
@@ -128,8 +128,11 @@ public class Worm {
 	
 	//TODO documentation getJumpStep...
 	/**
+	 * Return the position of the worm at a given time in a jump.
 	 * 
-	 * @param t
+	 * @param 	t
+	 * 			The time to check the position of the worm.
+	 * @return	The position of the worm at the given time in the jump.
 	 */
 	public double[] getJumpStep(double t) 
 	{
