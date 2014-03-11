@@ -152,19 +152,39 @@ public class Worm {
 	
 	//TODO documentatie van jump aanvullen
 	/**
+	 * Change the position of the worm as the result of a jump from the current position 
+	 * and with respect to the worm's orientation and the number of remaining action points.
 	 * 
-	 * @param worm
+	 * @post 	The x position is changed based on the current direction, the number of remaining action points,
+	 * 			the mass, the starting position of the worm and the standard acceleration. 
+	 * 			The new amount of current action points is zero.
+	 * 			| double force == (5.0*(double)getCurrentActionPoints()) + (getMass() * STANDARD_ACCELERATION)
+	 * 			| double initialVelocity == (force/getMass()) * 0.5
+	 * 			| double distance == (Math.pow(initialVelocity, 2) * Math.sin(2*getDirection()))/STANDARD_ACCELERATION
+	 * 			| new.getX() == getX() + distance
+	 * 			| new.getCurrentActionPoints() == 0
+	 * @throws	RuntimeException("This is not a valid direction for a jump!")
+	 * 			The current direction is not a valid direction for a jump
+	 * 			| Math.PI < getDirection()
 	 */
-	public void jump() {
-		// TODO Auto-generated method stub
-		
+	public void jump() 
+			throws RuntimeException
+	{
+		if(Math.PI < getDirection())
+			throw new RuntimeException("This is not a valid direction for a jump!");
+		double force = (5.0*(double)getCurrentActionPoints()) + (getMass() * STANDARD_ACCELERATION);
+		double initialVelocity = (force/getMass()) * 0.5;
+		double distance = (Math.pow(initialVelocity, 2) * Math.sin(2*getDirection()))/STANDARD_ACCELERATION;
+		setX(getX() + distance);
+		setCurrentActionPoints(0);
 	}
 	
 	/**
 	 * Moves the worm in the current direction with the given number of steps.
+	 * 
 	 * @param 	nbSteps
 	 * 			The number of steps to move.
-	 * @Post 	The x position and the y position are changed based on the number of steps, the radius,
+	 * @post 	The x position and the y position are changed based on the number of steps, the radius,
 	 * 			the direction and the starting values of x and y. The new amount of current action points is the old
 	 * 			amount of action points minus the used action points.
 	 * 			| new.getX() == Math.cos(getDirection()) * getRadius() * nbSteps
@@ -172,7 +192,7 @@ public class Worm {
 	 * 			| new.getCurrentActionPoints() ==
 	 * 			|		 getCurrentActionPoints() - (int)(Math.ceil((Math.cos(getDirection()) + 4*Math.sin(getDirection())) * nbSteps))
 	 * @Throws	IllegalArgumentException("The argument 'number of steps' is invalid.")
-	 * 			the given amount of steps is not a valid amount of steps
+	 * 			The given amount of steps is not a valid amount of steps.
 	 * 			| !canMove(nbSteps)
 	 */
 	public void move(int nbSteps) 
@@ -190,14 +210,19 @@ public class Worm {
 	}
 	
 	/**
-	 * variable registering the x-coordinate of a worm in meters.
+	 * Variable registering the x-coordinate of a worm in meters.
 	 */
 	private double x;
 	
 	/**
-	 * variable registering the y-coordinate of a worm in meters.
+	 * Variable registering the y-coordinate of a worm in meters.
 	 */
 	private double y;
+	
+	/**
+	 * Final class variable registering the standard acceleration (m/(s*s)).
+	 */
+	private final static double STANDARD_ACCELERATION = 9.80665;
 	
 	//TODO methodes in verband met radius hier zetten.
 	
