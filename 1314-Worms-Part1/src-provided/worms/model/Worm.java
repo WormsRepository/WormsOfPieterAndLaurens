@@ -126,41 +126,64 @@ public class Worm {
 				currentActionPoints >= Math.ceil((Math.cos(getDirection()) + 4*Math.sin(getDirection())) * nbSteps);
 	}
 	
-	//TODO documentatie van getJumpStep aanvullen
+	//TODO documentation getJumpStep...
 	/**
 	 * 
-	 * @param worm
 	 * @param t
-	 * @return
 	 */
-	public double[] getJumpStep(double t) {
-		// TODO Auto-generated method stub
-		return null;
+	public double[] getJumpStep(double t) 
+	{
+		double horizontalVelocity = getInitialVelocity() * Math.cos(getDirection());
+		double xPosition = getX() + horizontalVelocity * t;
+		double verticalVelocity = getInitialVelocity() * Math.sin(getDirection());
+		double yPosition = getY() + (verticalVelocity*t - (1/2)*STANDARD_ACCELERATION*Math.pow(t,2));
+		double[] position = {xPosition, yPosition};
+		return position;
 	}
 	
-	//TODO documentatie van getJumpTime aanvullen
+	//TODO documentation...
 	/**
-	 * 
-	 * @param worm
-	 * @return
+	 * Calculate the jump time from a jump in the current direction with the number of remaining action points.
 	 */
-	public double getJumpTime() {
-		// TODO Auto-generated method stub
-		return 0;
+	public double getJumpTime() 
+	{
+		return getDistance()/(getInitialVelocity() * Math.cos(getDirection()));
+	}
+	
+	//TODO documentation in formal language? in return clause?
+	/**
+	 * Calculate the distance covered by a jump in the current direction and with respect to the worm's
+	 * mass, the standard acceleration and the number of remaining action points.
+	 * 
+	 * @return	The distance covered by a jump in the current direction and with respect to the worm's
+	 * 			mass, the standard acceleration and the number of remaining action points.
+	 */
+	private double getDistance()
+	{
+		return (Math.pow(getInitialVelocity(), 2) * Math.sin(2*getDirection()))/STANDARD_ACCELERATION;
+	}
+	
+	//TODO documentation in return clause?
+	/**
+	 * Calculate the initial velocity for a jump with the current amount of action points, the mass
+	 * and the standard acceleration.
+	 */
+	private double getInitialVelocity()
+	{
+		double force = (5.0*(double)getCurrentActionPoints()) + (getMass() * STANDARD_ACCELERATION);
+		return (force/getMass()) * 0.5;
 	}
 	
 //right exception?
 	/**
 	 * Change the position of the worm as the result of a jump from the current position 
-	 * and with respect to the worm's orientation and the number of remaining action points.
+	 * and with respect to the worm's orientation, his mass, the standard acceleration 
+	 * and the number of remaining action points.
 	 * 
 	 * @post 	The x position is changed based on the current direction, the number of remaining action points,
 	 * 			the mass, the starting position of the worm and the standard acceleration. 
 	 * 			The new amount of current action points is zero.
-	 * 			| double force == (5.0*(double)getCurrentActionPoints()) + (getMass() * STANDARD_ACCELERATION)
-	 * 			| double initialVelocity == (force/getMass()) * 0.5
-	 * 			| double distance == (Math.pow(initialVelocity, 2) * Math.sin(2*getDirection()))/STANDARD_ACCELERATION
-	 * 			| new.getX() == getX() + distance
+	 * 			| new.getX() == getX() + getDistance()
 	 * 			| new.getCurrentActionPoints() == 0
 	 * @throws	RuntimeException("This is not a valid direction for a jump!")
 	 * 			The current direction is not a valid direction for a jump
@@ -171,10 +194,7 @@ public class Worm {
 	{
 		if(Math.PI < getDirection())
 			throw new RuntimeException("This is not a valid direction for a jump!");
-		double force = (5.0*(double)getCurrentActionPoints()) + (getMass() * STANDARD_ACCELERATION);
-		double initialVelocity = (force/getMass()) * 0.5;
-		double distance = (Math.pow(initialVelocity, 2) * Math.sin(2*getDirection()))/STANDARD_ACCELERATION;
-		setX(getX() + distance);
+		setX(getX() + getDistance());
 		setCurrentActionPoints(0);
 	}
 	
