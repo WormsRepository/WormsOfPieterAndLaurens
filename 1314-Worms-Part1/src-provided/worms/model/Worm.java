@@ -110,7 +110,6 @@ public class Worm {
 		this.y = y;
 	}
 	
-	//TODO methodes in verband met positie hier zetten.
 	/**
 	 * Check whether the given number of steps is a valid amount of steps for the worm.
 	 * 
@@ -224,7 +223,7 @@ public class Worm {
 	 */
 	private final static double STANDARD_ACCELERATION = 9.80665;
 	
-	//TODO methodes in verband met radius hier zetten.
+	
 	
 	/**
 	 * Return the radius of this worm.
@@ -261,7 +260,7 @@ public class Worm {
 	
 	
 	
-	//TODO methodes in verband met minimumradius hier zetten.
+
 	
 	/**
 	 * Check whether the given radius is a valid radius for this worm.
@@ -308,7 +307,9 @@ public class Worm {
 	 * 	Variable registering the minimal radius of a worm.
 	 */
 	private double minRadius = 0.25;
-	//TODO methodes in verband met direction en angle hier zetten.
+
+	
+	
 	
 	/**
 	 * Return the direction of this worm.
@@ -387,7 +388,9 @@ public class Worm {
 	 */
 	private double direction = 0;
 	
-	//alle methodes ivm mass hier zetten
+
+	
+	
 	
 	/**
 	 * Return the mass of this worm.
@@ -399,7 +402,8 @@ public class Worm {
 	}
 	
 	
-	//TODO methodes op de juiste plaats implementeren
+
+	
 	
 	/**
 	 * @param	radius
@@ -423,14 +427,16 @@ public class Worm {
 	 */
 	private double mass = 0;
 	
-	// alle methodes ivm density hier zetten
+
+	
 	/**
 	 * final class variable registering the density of all worms.
 	 */
 	private final static double DENSITY = 1062;
 	
-	//alle methodes ivm maxActionPoints hier zetten
-	//TODO methodes op de juiste plaats implementeren
+
+	
+	
 	/**
 	 * Returns the variable maxActionPoints.
 	 * 		The maximum amount of action points a worm has is represented by the variable maxActionPoints.
@@ -458,7 +464,8 @@ public class Worm {
 	 */
 	private long maxActionPoints = 0;
 	
-	//alle methodes ivm currentActionPoints hier zetten.
+
+	
 	
 	/**
 	 * Return the current amount of action points of this worm.
@@ -484,7 +491,8 @@ public class Worm {
 	 * variable registering the current amount of aciton points of a worm.
 	 */
 	private long currentActionPoints = 0;
-	//alle methodes ivm met name hier zetten.
+
+	
 	
 
 	/**
