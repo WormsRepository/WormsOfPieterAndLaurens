@@ -5,116 +5,98 @@ public class Facade implements IFacade {
 	@Override
 	public Worm createWorm(double x, double y, double direction, double radius,
 			String name) {
-		// TODO Auto-generated method stub
-		return null;
+		Worm worm = new Worm(x,y,direction,radius,name);
+		return worm;
 	}
 
 	@Override
 	public boolean canMove(Worm worm, int nbSteps) {
-		// TODO Auto-generated method stub
-		return false;
+		return worm.canMove(nbSteps);
 	}
 
 	@Override
 	public void move(Worm worm, int nbSteps) {
-		// TODO Auto-generated method stub
-		
+		worm.move(nbSteps);
 	}
 
 	@Override
 	public boolean canTurn(Worm worm, double angle) {
-		// TODO Auto-generated method stub
-		return false;
+		return worm.canTurn(angle);
 	}
 
 	@Override
 	public void turn(Worm worm, double angle) {
-		// TODO Auto-generated method stub
-		
+		worm.turn(angle);
 	}
 
 	@Override
 	public void jump(Worm worm) {
-		// TODO Auto-generated method stub
-		
+		worm.jump();
 	}
 
 	@Override
 	public double getJumpTime(Worm worm) {
-		// TODO Auto-generated method stub
-		return 0;
+		return worm.getJumpTime();
 	}
 
 	@Override
 	public double[] getJumpStep(Worm worm, double t) {
-		// TODO Auto-generated method stub
-		return null;
+		return worm.getJumpStep(t);
 	}
 
 	@Override
 	public double getX(Worm worm) {
-		// TODO Auto-generated method stub
-		return 0;
+		return worm.getX();
 	}
 
 	@Override
 	public double getY(Worm worm) {
-		// TODO Auto-generated method stub
-		return 0;
+		return worm.getY();
 	}
 
 	@Override
 	public double getOrientation(Worm worm) {
-		// TODO Auto-generated method stub
-		return 0;
+		return worm.getDirection();
 	}
 
 	@Override
 	public double getRadius(Worm worm) {
-		// TODO Auto-generated method stub
-		return 0;
+		return worm.getRadius();
 	}
 
 	@Override
 	public void setRadius(Worm worm, double newRadius) {
-		// TODO Auto-generated method stub
-		
+		worm.setRadius(newRadius);
 	}
 
 	@Override
 	public double getMinimalRadius(Worm worm) {
-		// TODO Auto-generated method stub
-		return 0;
+		return worm.getMinimalRadius();
 	}
 
 	@Override
 	public int getActionPoints(Worm worm) {
-		// TODO Auto-generated method stub
-		return 0;
+		return (int)worm.getCurrentActionPoints();
 	}
 
 	@Override
 	public int getMaxActionPoints(Worm worm) {
-		// TODO Auto-generated method stub
-		return 0;
+		return (int)worm.getMaxActionPoints();
 	}
 
 	@Override
 	public String getName(Worm worm) {
-		// TODO Auto-generated method stub
-		return null;
+		return worm.getName();
 	}
 
 	@Override
 	public void rename(Worm worm, String newName) {
-		// TODO Auto-generated method stub
-		
+		worm.setName(newName);
 	}
 
 	@Override
 	public double getMass(Worm worm) {
-		// TODO Auto-generated method stub
-		return 0;
+		return worm.getMass();
 	}
 
 }
