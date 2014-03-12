@@ -31,17 +31,44 @@ public class Facade implements IFacade {
 
 	@Override
 	public void jump(Worm worm) {
-		worm.jump();
+		try
+		{
+			worm.jump();
+		}
+		catch (IllegalDirectionException x){}
+		catch(IllegalActionPointsException x){}
 	}
 
 	@Override
 	public double getJumpTime(Worm worm) {
-		return worm.getJumpTime();
+		try
+		{
+			return worm.getJumpTime();
+		}
+		catch(IllegalDirectionException x)
+		{
+			return 0;
+		}
+		catch(IllegalActionPointsException x)
+		{
+			return 0;
+		}
 	}
 
 	@Override
 	public double[] getJumpStep(Worm worm, double t) {
-		return worm.getJumpStep(t);
+		try
+		{
+			return worm.getJumpStep(t);
+		}
+		catch(IllegalDirectionException x)
+		{
+			return null;
+		}
+		catch(IllegalActionPointsException x)
+		{
+			return null;
+		}
 	}
 
 	@Override
