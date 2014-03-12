@@ -142,11 +142,16 @@ public class Worm {
 	 * 			The time to check the position of the worm.
 	 * @return	The position of the worm at the given time in the jump.
 	 * @throws	IllegalActionPointsException(0,this)
-	 * 			It is not possible to perform a jump (and have an initial velocity for a jump)
+	 * 			It is not possible to perform a jump (and have a jump step)
 	 * 			if the amount of current action points is zero.
 	 * 			| getCurrentActionPoints() == 0
+	 * @throws 	IllegalDirectionException(getDirection(),this)
+	 * 			It is not possible to perform a jump (and have a jump step)
+	 * 			if the direction is greater than pi.
+	 * 			| Math.PI < getDirection()
 	 */
 	public double[] getJumpStep(double t) 
+			throws IllegalActionPointsException, IllegalDirectionException
 	{
 		double horizontalVelocity = getInitialVelocity() * Math.cos(getDirection());
 		double xPosition = getX() + horizontalVelocity * t;
@@ -161,11 +166,16 @@ public class Worm {
 	 * Calculate the jump time from a jump in the current direction with the number of remaining action points.
 	 * 
 	 * @throws	IllegalActionPointsException(0,this)
-	 * 			It is not possible to perform a jump (and have an initial velocity for a jump)
+	 * 			It is not possible to perform a jump (and have a jump time)
 	 * 			if the amount of current action points is zero.
 	 * 			| getCurrentActionPoints() == 0
+	 * @throws 	IllegalDirectionException(getDirection(),this)
+	 * 			It is not possible to perform a jump (and have a jump time)
+	 * 			if the direction is greater than pi.
+	 * 			| Math.PI < getDirection()
 	 */
 	public double getJumpTime() 
+			throws IllegalActionPointsException, IllegalDirectionException
 	{
 		return getDistance()/(getInitialVelocity() * Math.cos(getDirection()));
 	}
@@ -178,12 +188,16 @@ public class Worm {
 	 * @return	The distance covered by a jump in the current direction and with respect to the worm's
 	 * 			mass, the standard acceleration and the number of remaining action points.
 	 * @throws	IllegalActionPointsException(0,this)
-	 * 			It is not possible to perform a jump (and have an initial velocity for a jump)
+	 * 			It is not possible to perform a jump (and have a distance for a jump)
 	 * 			if the amount of current action points is zero.
 	 * 			| getCurrentActionPoints() == 0
+	 * @throws 	IllegalDirectionException(getDirection(),this)
+	 * 			It is not possible to perform a jump (and have a distance for a jump)
+	 * 			if the direction is greater than pi.
+	 * 			| Math.PI < getDirection()
 	 */
 	private double getDistance() 
-			throws IllegalActionPointsException
+			throws IllegalActionPointsException, IllegalDirectionException
 	{
 		return (Math.pow(getInitialVelocity(), 2) * Math.sin(2*getDirection()))/STANDARD_ACCELERATION;
 	}
@@ -197,12 +211,18 @@ public class Worm {
 	 * 			It is not possible to perform a jump (and have an initial velocity for a jump)
 	 * 			if the amount of current action points is zero.
 	 * 			| getCurrentActionPoints() == 0
+	 * @throws 	IllegalDirectionException(getDirection(),this)
+	 * 			It is not possible to perform a jump (and have an initial velocity for a jump)
+	 * 			if the direction is greater than pi.
+	 * 			| Math.PI < getDirection()
 	 */
 	private double getInitialVelocity() 
-			throws IllegalActionPointsException
+			throws IllegalActionPointsException, IllegalDirectionException
 	{
 		if(getCurrentActionPoints() == 0)
 			throw new IllegalActionPointsException(0,this);
+		if(Math.PI < getDirection())
+			throw new IllegalDirectionException(getDirection(),this);
 		double force = (5.0*(double)getCurrentActionPoints()) + (getMass() * STANDARD_ACCELERATION);
 		return (force/getMass()) * 0.5;
 	}
@@ -218,20 +238,18 @@ public class Worm {
 	 * 			The new amount of current action points is zero.
 	 * 			| new.getX() == getX() + getDistance()
 	 * 			| new.getCurrentActionPoints() == 0
-	 * @throws	RuntimeException("This is not a valid direction for a jump!")
-	 * 			The current direction is not a valid direction for a jump
-	 * 			| Math.PI < getDirection()
 	 * @throws	IllegalActionPointsException(0,this)
-	 * 			It is not possible to perform a jump (and have an initial velocity for a jump)
-	 * 			if the amount of current action points is zero.
+	 * 			It is not possible to perform a jump if the amount of current action points is zero.
 	 * 			| getCurrentActionPoints() == 0
+	 * @throws 	IllegalDirectionException(getDirection(),this)
+	 * 			It is not possible to perform a jump if the direction is greater than pi.
+	 * 			| Math.PI < getDirection()
 	 */
 	public void jump() 
-			throws RuntimeException, IllegalActionPointsException
+			throws IllegalActionPointsException, IllegalDirectionException
 	{
-		if(Math.PI < getDirection())
-			throw new RuntimeException("This is not a valid direction for a jump!");
-		setX(getX() + getDistance());
+		double distance = getDistance();
+		setX(getX() + distance);
 		setCurrentActionPoints(0);
 	}
 	
