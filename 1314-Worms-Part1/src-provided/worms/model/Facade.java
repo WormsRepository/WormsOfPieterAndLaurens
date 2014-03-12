@@ -4,9 +4,17 @@ public class Facade implements IFacade {
 
 	@Override
 	public Worm createWorm(double x, double y, double direction, double radius,
-			String name) {
+			String name) throws ModelException{
+		try{
 		Worm worm = new Worm(x,y,direction,radius,name);
 		return worm;
+		}
+		catch(IllegalRadiusException z){
+			throw new ModelException("This is not a valid radius!");
+		}
+		catch(IllegalNameException z){
+			throw new ModelException("This is not a valid name!");
+		}
 	}
 
 	@Override
@@ -30,7 +38,8 @@ public class Facade implements IFacade {
 	}
 
 	@Override
-	public void jump(Worm worm) {
+	public void jump(Worm worm) 
+			throws ModelException{
 		try{
 			worm.jump();
 		}
@@ -43,7 +52,8 @@ public class Facade implements IFacade {
 	}
 
 	@Override
-	public double getJumpTime(Worm worm) {
+	public double getJumpTime(Worm worm) 
+			throws ModelException{
 		try{
 			return worm.getJumpTime();
 		}
@@ -56,7 +66,8 @@ public class Facade implements IFacade {
 	}
 
 	@Override
-	public double[] getJumpStep(Worm worm, double t) {
+	public double[] getJumpStep(Worm worm, double t) 
+			throws ModelException{
 		try{
 			return worm.getJumpStep(t);
 		}
@@ -114,7 +125,8 @@ public class Facade implements IFacade {
 	}
 
 	@Override
-	public void rename(Worm worm, String newName) {
+	public void rename(Worm worm, String newName) 
+			throws ModelException{
 		try{
 			worm.setName(newName);
 		}
