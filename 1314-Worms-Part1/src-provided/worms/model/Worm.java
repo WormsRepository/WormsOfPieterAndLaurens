@@ -50,11 +50,12 @@ public class Worm {
 	 * @throws	IllegalNameException(name,this)
 	 * 			This new worm cannot have the given name as its name.
 	 * 			| !canHaveAsName(name)
-	 * @effect	The mass of this new worm and the maximum amount of action points of this new worm
-	 * 			is set, it depends on the radius of this new worm. There is only a mass and a maximum
+	 * @effect	The mass of this new worm, the maximum and current amount of action points of this new worm
+	 * 			is set, it depends on the radius of this new worm. There is only a mass, a maximum and a current
 	 * 			amount of action points if the radius is a valid radius for any worm.
 	 * 			| this.setMass(radius)
 	 * 			| this.setMaxActionPoints(mass)
+	 * 			| this.setCurrentActionPoints(new.getMaxActionPoints())
 	 */
 	public Worm(double x, double y, double direction, double radius,String name) 
 			throws IllegalRadiusException, IllegalNameException
@@ -65,6 +66,7 @@ public class Worm {
 		setRadius(radius);
 		setMass(radius);
 		setMaxActionPoints(mass);
+		setCurrentActionPoints(getMaxActionPoints());
 		setName(name);
 	}
 	
@@ -119,12 +121,12 @@ public class Worm {
 	 * @return	True if and only if the amount of steps is larger than zero 
 	 * 			and there are enough action points available for the move.
 	 * 			| nbSteps > 0 && 
-	 * 			| currentActionPoints >= Math.ceil((Math.cos(getDirection()) + 4*Math.sin(getDirection())) * nbSteps)
+	 * 			| currentActionPoints >= Math.ceil((Math.abs(Math.cos(getDirection())) + Math.abs(4*Math.sin(getDirection()))) * nbSteps)
 	 */
 	public boolean canMove(int nbSteps) 
 	{
 		return nbSteps > 0 && 
-				currentActionPoints >= Math.ceil((Math.cos(getDirection()) + 4*Math.sin(getDirection())) * nbSteps);
+				currentActionPoints >= Math.ceil((Math.abs(Math.cos(getDirection())) + Math.abs(4*Math.sin(getDirection()))) * nbSteps);
 	}
 	
 	//TODO documentation getJumpStep...
@@ -213,7 +215,7 @@ public class Worm {
 	 * 			| new.getX() == getX() + Math.cos(getDirection()) * getRadius() * nbSteps
 	 * 			| new.getY() == getY() + Math.sin(getDirection()) * getRadius() * nbSteps
 	 * 			| new.getCurrentActionPoints() ==
-	 * 			|		 getCurrentActionPoints() - (int)(Math.ceil((Math.cos(getDirection()) + 4*Math.sin(getDirection())) * nbSteps))
+	 * 			|		 getCurrentActionPoints() - (long)Math.ceil((Math.abs(Math.cos(getDirection())) + Math.abs(4*Math.sin(getDirection()))) * nbSteps)
 	 * @Throws	IllegalArgumentException("The argument 'number of steps' is invalid.")
 	 * 			The given amount of steps is not a valid amount of steps.
 	 * 			| !canMove(nbSteps)
@@ -225,10 +227,9 @@ public class Worm {
 			throw new IllegalArgumentException("The argument 'number of steps' is invalid.");
 		
 		setX(getX() + Math.cos(getDirection()) * getRadius() * nbSteps);
-		//TODO rekening houden met overflow?
 		setY(getY() + Math.sin(getDirection()) * getRadius() * nbSteps);
 		
-		long costOfActionPoints = (long)(Math.ceil((Math.cos(getDirection()) + 4*Math.sin(getDirection())) * nbSteps));
+		long costOfActionPoints = (long)Math.ceil((Math.abs(Math.cos(getDirection())) + Math.abs(4*Math.sin(getDirection()))) * nbSteps);
 		setCurrentActionPoints(getCurrentActionPoints() - costOfActionPoints);
 	}
 	
