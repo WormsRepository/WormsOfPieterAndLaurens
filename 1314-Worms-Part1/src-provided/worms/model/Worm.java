@@ -367,13 +367,13 @@ public class Worm {
 	 * 			|	then result == false
 	 * 			Otherwise, true if and only if the amount of action points needed for such a turn
 	 * 			is smaller than the current amount of action points.
-	 * 			| else result == (getCurrentActionPoints() >= (int)(Math.ceil(angle / (2*Math.PI) * 60)))
+	 * 			| else result == (getCurrentActionPoints() >= (int)(Math.ceil(Math.abs(angle) / (2*Math.PI) * 60)))
 	 */
 	public boolean canTurn(double angle) {
 		if(Math.abs(angle) > Math.PI || angle == 0) {
 			return false;
 		}
-		return getCurrentActionPoints() >= (int)(Math.ceil(angle / (2*Math.PI) * 60));
+		return getCurrentActionPoints() >= (int)(Math.ceil(Math.abs(angle) / (2*Math.PI) * 60));
 	}
 
 	/**
@@ -387,7 +387,7 @@ public class Worm {
 	 * 			and possibly incremented or decremented with two pi.
 	 * 			The new amount of current action points is equal to the old amount 
 	 * 			decremented with the used action points
-	 * 			| new.getCurrentActionPoints == getCurrentActionPoints - (int)(Math.ceil(angle / (2*Math.PI) * 60))
+	 * 			| new.getCurrentActionPoints == getCurrentActionPoints - (int)(Math.ceil(Math.abs(angle) / (2*Math.PI) * 60))
 	 * 			| if ((getDirection() + angle) > 2*Math.PI)
 	 * 			|	then (new.getDirection() == getDirection() + angle - 2*Math.PI)
 	 * 			| else if ((getDirection() + angle) < 0)
@@ -407,7 +407,7 @@ public class Worm {
 				orientation += 2*Math.PI;
 		}
 		setDirection(orientation);
-		setCurrentActionPoints(getCurrentActionPoints() - (int)(Math.ceil(angle / (2*Math.PI) * 60)));
+		setCurrentActionPoints(getCurrentActionPoints() - (int)(Math.ceil(Math.abs(angle) / (2*Math.PI) * 60)));
 	}
 	
 	/**
