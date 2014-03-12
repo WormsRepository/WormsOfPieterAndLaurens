@@ -343,7 +343,7 @@ public class Worm {
 	 * @return	True if and only if the given radius is not below the minimum radius.
 	 * 			| radius >= getMinimalRadius()
 	 */
-	public boolean canHaveAsRadius(double radius)
+	private boolean canHaveAsRadius(double radius)
 	{
 		return radius >= getMinimalRadius();
 	}
