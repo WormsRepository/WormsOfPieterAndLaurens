@@ -34,8 +34,12 @@ public class Facade implements IFacade {
 		try{
 			worm.jump();
 		}
-		catch (IllegalDirectionException x){}
-		catch(IllegalActionPointsException x){}
+		catch (IllegalDirectionException x){
+			throw new ModelException("You can not jump in this direction!");
+		}
+		catch(IllegalActionPointsException x){
+			throw new ModelException("You can not jump without action points!");
+		}
 	}
 
 	@Override
@@ -114,7 +118,9 @@ public class Facade implements IFacade {
 		try{
 			worm.setName(newName);
 		}
-		catch(IllegalNameException x){}
+		catch(IllegalNameException x){
+			throw new ModelException("This is not a valid name!");
+		}
 	}
 
 	@Override
