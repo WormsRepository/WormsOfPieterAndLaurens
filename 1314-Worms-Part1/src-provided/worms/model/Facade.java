@@ -23,8 +23,15 @@ public class Facade implements IFacade {
 	}
 
 	@Override
-	public void move(Worm worm, int nbSteps) {
-		worm.move(nbSteps);
+	public void move(Worm worm, int nbSteps) 
+			throws IllegalArgumentException{
+		try{
+			worm.move(nbSteps);
+		}
+		catch(IllegalArgumentException x){
+			throw new ModelException("This worm cannot move :(");
+		}
+		
 	}
 
 	@Override
@@ -100,8 +107,14 @@ public class Facade implements IFacade {
 	}
 
 	@Override
-	public void setRadius(Worm worm, double newRadius) {
-		worm.setRadius(newRadius);
+	public void setRadius(Worm worm, double newRadius) 
+			throws ModelException{
+		try{
+			worm.setRadius(newRadius);
+		}
+		catch(IllegalRadiusException x){
+			throw new ModelException("This is not a valid radius!");
+		}
 	}
 
 	@Override

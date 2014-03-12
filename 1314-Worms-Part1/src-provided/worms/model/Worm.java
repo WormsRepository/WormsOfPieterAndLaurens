@@ -1,9 +1,6 @@
 // versie: woensdag 12 maart 14:00
 //method changeRadius? and how about minRadius?
-//TODO method jump may not be possible if the current amount of action points equals zero.
-//TODO illegaldirectionexception invoegen
-//TODO illegalactionpointsException invoegen
-//TODO jump methodes aanpassen met exceptions
+
 //TODO constructor action points methods...
 
 package worms.model;
@@ -45,8 +42,6 @@ public class Worm {
 	 * 			| new.getY() == y
 	 * @post	The new direction of this new worm is equal to the given direction.
 	 * 			| new.getDirection() == direction
-	 * @post	The new radius of this new worm is equal to the given radius.
-	 * 			| new.getRadius() == radius
 	 * @post	The new name of this worm is equal to the given name.
 	 * 			| new.getName() == name
 	 * @throws	IllegalRadiusException(radius,this)
@@ -55,11 +50,10 @@ public class Worm {
 	 * @throws	IllegalNameException(name,this)
 	 * 			This new worm cannot have the given name as its name.
 	 * 			| !canHaveAsName(name)
-	 * @effect	The mass of this new worm, the maximum and current amount of action points of this new worm
-	 * 			is set, it depends on the radius of this new worm. There is only a mass, a maximum and a current
+	 * @effect	The radius of this new worm, the mass of this new worm, the maximum and current amount of action points of this new worm
+	 * 			is set, some of them depend on the radius of this new worm. There is only a mass, a maximum and a current
 	 * 			amount of action points if the radius is a valid radius for any worm.
-	 * 			| this.setMass(radius)
-	 * 			| this.setMaxActionPoints(mass)
+	 * 			| this.setRadius()
 	 * 			| this.setCurrentActionPoints(new.getMaxActionPoints())
 	 */
 	public Worm(double x, double y, double direction, double radius,String name) 
@@ -69,8 +63,6 @@ public class Worm {
 		setY(y);
 		setDirection(direction);
 		setRadius(radius);
-		setMass(radius);
-		setMaxActionPoints(mass);
 		setCurrentActionPoints(getMaxActionPoints());
 		setName(name);
 	}
@@ -318,6 +310,11 @@ public class Worm {
 	 * @throws	IllegalRadiusException(radius,this)
 	 * 			The given radius is not a valid radius for this worm.
 	 * 			| !canHaveAsRadius(radius)
+	 * @effect	The mass of this new worm and the maximum amount of action points of this worm
+	 * 			is set, it depends on the new radius of this worm. There is only a mass and a maximum
+	 * 			amount of action points if the radius is a valid radius for any worm.
+	 * 			| this.setMass()
+	 * 			| this.setMaxActionPoints()
 	 */
 	public void setRadius(double radius) 
 			throws IllegalRadiusException
@@ -325,6 +322,8 @@ public class Worm {
 		if(! canHaveAsRadius(radius))
 			throw new IllegalRadiusException(radius,this);
 		this.radius = radius;
+		setMass();
+		setMaxActionPoints();
 	}
 	
 	/**
@@ -497,31 +496,31 @@ public class Worm {
 	
 	
 	/**
-	 * @param	radius
-	 * 			The radius needed for the calculation of the worm's mass.
+	 * Set the mass of the worm according to the radius.
+	 * 
 	 * @post	The new mass is calculated with the radius and the density.
-	 * 			| new.mass = DENSITY * ((4/3) * Math.PI * Math.pow(radius,3))
-	 * @throws	IllegalRadiusException(radius,this)
+	 * 			| new.mass = DENSITY * ((4/3) * Math.PI * Math.pow(getRadius(),3))
+	 * @throws	IllegalRadiusException(getRadius(),this)
 	 * 			The given radius is not a valid radius for this worm.
-	 * 			| !canHaveAsRadius(radius)
+	 * 			| !canHaveAsRadius(getRadius())
 	 */
-	private void setMass(double radius) 
+	private void setMass() 
 			throws IllegalRadiusException
 	{
-		if(! canHaveAsRadius(radius))
-			throw new IllegalRadiusException(radius, this);
-		mass = DENSITY * ((4/3) * Math.PI * Math.pow(radius,3));
+		if(! canHaveAsRadius(getRadius()))
+			throw new IllegalRadiusException(getRadius(), this);
+		mass = DENSITY * ((4/3) * Math.PI * Math.pow(getRadius(),3));
 	}
 	
 	/**
-	 * variable registering the mass of a worm
+	 * Variable registering the mass of a worm.
 	 */
 	private double mass = 0;
 	
 
 	
 	/**
-	 * final class variable registering the density of all worms.
+	 * Final class variable registering the density of all worms.
 	 */
 	private final static double DENSITY = 1062;
 	
@@ -539,15 +538,21 @@ public class Worm {
 	}
 	
 	/**
-	 * set the max action points of this worm according to the given mass.
+	 * Set the max action points of this worm according to the mass, 
+	 * if needed change the current amount of action points.
 	 * 
-	 * @param 	mass
 	 * @post 	the new maximum action points is the mass rounded to the nearest integer.
-	 * 			| new.maxActionPoints = Math.round(mass)
+	 * 			| new.maxActionPoints = Math.round(getMass())
+	 * 			If the current amount of action points is bigger than the maximum amount of action points
+	 * 			the current amount of action points is set to the maximum amount of action points.
+	 * 			| if(getCurrentActionPoints() > getMaxActionPoints())
+	 * 			|	then(new.getCurrentActionPoints() == new.getMaxActionPoints())
 	 */
-	private void setMaxActionPoints(double mass)
+	private void setMaxActionPoints()
 	{
-		maxActionPoints = Math.round(mass);
+		maxActionPoints = Math.round(getMass());
+		if(getCurrentActionPoints() > getMaxActionPoints())
+			setCurrentActionPoints(getMaxActionPoints());
 	}
 	
 	/**
@@ -570,11 +575,17 @@ public class Worm {
 	 * 
 	 * @param 	newActionPoints
 	 * 			The new amount of current action points for this worm.
-	 * @post	The new amount of current action points is equal to the given amount.
-	 * 			| new.getCurrentActionPoints() == newActionPoints
+	 * @post	If the new amount of current action points is below zero or greater than
+	 * 			the maximum amount of action points, nothing happens.
+	 * 			| if(newActionPoints < 0 || newActionPoints > getMaxActionPoints())
+	 * 			|	then new.getCurrentActionPoints() == getCurrentActionPoints()
+	 * 			Else the new amount of current action points is equal to the given amount.
+	 * 			| else (new.getCurrentActionPoints() == newActionPoints)
 	 */
 	@Model
 	private void setCurrentActionPoints(long newActionPoints){
+		if(newActionPoints < 0 || newActionPoints > getMaxActionPoints())
+			return;
 		this.currentActionPoints = newActionPoints;
 	}
 	
