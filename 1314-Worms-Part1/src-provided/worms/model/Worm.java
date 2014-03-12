@@ -1,4 +1,5 @@
 // versie: woensdag 12 maart 00:05
+//method changeRadius? and how about minRadius?
 
 package worms.model;
 
