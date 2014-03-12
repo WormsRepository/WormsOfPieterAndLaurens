@@ -141,6 +141,10 @@ public class Worm {
 	 * @param 	t
 	 * 			The time to check the position of the worm.
 	 * @return	The position of the worm at the given time in the jump.
+	 * @throws	IllegalActionPointsException(0,this)
+	 * 			It is not possible to perform a jump (and have an initial velocity for a jump)
+	 * 			if the amount of current action points is zero.
+	 * 			| getCurrentActionPoints() == 0
 	 */
 	public double[] getJumpStep(double t) 
 	{
@@ -155,6 +159,11 @@ public class Worm {
 	//TODO documentation...
 	/**
 	 * Calculate the jump time from a jump in the current direction with the number of remaining action points.
+	 * 
+	 * @throws	IllegalActionPointsException(0,this)
+	 * 			It is not possible to perform a jump (and have an initial velocity for a jump)
+	 * 			if the amount of current action points is zero.
+	 * 			| getCurrentActionPoints() == 0
 	 */
 	public double getJumpTime() 
 	{
@@ -168,8 +177,13 @@ public class Worm {
 	 * 
 	 * @return	The distance covered by a jump in the current direction and with respect to the worm's
 	 * 			mass, the standard acceleration and the number of remaining action points.
+	 * @throws	IllegalActionPointsException(0,this)
+	 * 			It is not possible to perform a jump (and have an initial velocity for a jump)
+	 * 			if the amount of current action points is zero.
+	 * 			| getCurrentActionPoints() == 0
 	 */
 	private double getDistance() 
+			throws IllegalActionPointsException
 	{
 		return (Math.pow(getInitialVelocity(), 2) * Math.sin(2*getDirection()))/STANDARD_ACCELERATION;
 	}
@@ -178,9 +192,17 @@ public class Worm {
 	/**
 	 * Calculate the initial velocity for a jump with the current amount of action points, the mass
 	 * and the standard acceleration.
+	 * 
+	 * @throws	IllegalActionPointsException(0,this)
+	 * 			It is not possible to perform a jump (and have an initial velocity for a jump)
+	 * 			if the amount of current action points is zero.
+	 * 			| getCurrentActionPoints() == 0
 	 */
 	private double getInitialVelocity() 
+			throws IllegalActionPointsException
 	{
+		if(getCurrentActionPoints() == 0)
+			throw new IllegalActionPointsException(0,this);
 		double force = (5.0*(double)getCurrentActionPoints()) + (getMass() * STANDARD_ACCELERATION);
 		return (force/getMass()) * 0.5;
 	}
@@ -199,9 +221,13 @@ public class Worm {
 	 * @throws	RuntimeException("This is not a valid direction for a jump!")
 	 * 			The current direction is not a valid direction for a jump
 	 * 			| Math.PI < getDirection()
+	 * @throws	IllegalActionPointsException(0,this)
+	 * 			It is not possible to perform a jump (and have an initial velocity for a jump)
+	 * 			if the amount of current action points is zero.
+	 * 			| getCurrentActionPoints() == 0
 	 */
 	public void jump() 
-			throws RuntimeException
+			throws RuntimeException, IllegalActionPointsException
 	{
 		if(Math.PI < getDirection())
 			throw new RuntimeException("This is not a valid direction for a jump!");
