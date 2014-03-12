@@ -210,8 +210,8 @@ public class Worm {
 	 * @post 	The x position and the y position are changed based on the number of steps, the radius,
 	 * 			the direction and the starting values of x and y. The new amount of current action points is the old
 	 * 			amount of action points minus the used action points.
-	 * 			| new.getX() == Math.cos(getDirection()) * getRadius() * nbSteps
-	 * 			| new.getY() == Math.sin(getDirection()) * getRadius() * nbSteps
+	 * 			| new.getX() == getX() + Math.cos(getDirection()) * getRadius() * nbSteps
+	 * 			| new.getY() == getY() + Math.sin(getDirection()) * getRadius() * nbSteps
 	 * 			| new.getCurrentActionPoints() ==
 	 * 			|		 getCurrentActionPoints() - (int)(Math.ceil((Math.cos(getDirection()) + 4*Math.sin(getDirection())) * nbSteps))
 	 * @Throws	IllegalArgumentException("The argument 'number of steps' is invalid.")
@@ -224,9 +224,9 @@ public class Worm {
 		if(! canMove(nbSteps))
 			throw new IllegalArgumentException("The argument 'number of steps' is invalid.");
 		
-		setX(Math.cos(getDirection()) * getRadius() * nbSteps);
+		setX(getX() + Math.cos(getDirection()) * getRadius() * nbSteps);
 		//TODO rekening houden met overflow?
-		setY(Math.sin(getDirection()) * getRadius() * nbSteps);
+		setY(getY() + Math.sin(getDirection()) * getRadius() * nbSteps);
 		
 		long costOfActionPoints = (long)(Math.ceil((Math.cos(getDirection()) + 4*Math.sin(getDirection())) * nbSteps));
 		setCurrentActionPoints(getCurrentActionPoints() - costOfActionPoints);
