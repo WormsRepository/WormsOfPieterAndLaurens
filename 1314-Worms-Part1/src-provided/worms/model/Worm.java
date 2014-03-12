@@ -4,6 +4,7 @@
 //TODO illegaldirectionexception invoegen
 //TODO illegalactionpointsException invoegen
 //TODO jump methodes aanpassen met exceptions
+//TODO constructor action points methods...
 
 package worms.model;
 
