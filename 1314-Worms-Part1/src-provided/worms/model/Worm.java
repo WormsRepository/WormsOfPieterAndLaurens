@@ -1,4 +1,4 @@
-// versie: woensdag 12 maart 00:05
+// versie: woensdag 12 maart 13:30
 //method changeRadius? and how about minRadius?
 
 package worms.model;
@@ -393,9 +393,7 @@ public class Worm {
 	 * 			| else if ((getDirection() + angle) < 0)
 	 * 			|	then (new.getDirection() == getDirection() + angle + 2*Math.PI)
 	 * 			| else
-	 * 			| 	then (new.getDirection() == getDirectin() + angle
-	 * new.getDirection() == setDirection(getDirection() + angle)
-	 * 			
+	 * 			| 	then (new.getDirection() == getDirectin() + angle	
 	 */
 	public void turn(double angle) {
 		double orientation = getDirection() + angle;
