@@ -134,12 +134,8 @@ public class Worm {
 	 * @param 	t
 	 * 			The time to check the position of the worm.
 	 * @return	The position of the worm at the given time in the jump.
-	 * @throws	RuntimeException("This is not a valid direction for a jump!")
-	 * 			The current direction is not a valid direction for a jump
-	 * 			| Math.PI < getDirection()
 	 */
 	public double[] getJumpStep(double t) 
-			throws RuntimeException
 	{
 		double horizontalVelocity = getInitialVelocity() * Math.cos(getDirection());
 		double xPosition = getX() + horizontalVelocity * t;
@@ -152,13 +148,8 @@ public class Worm {
 	//TODO documentation...
 	/**
 	 * Calculate the jump time from a jump in the current direction with the number of remaining action points.
-	 * 
-	 * @throws	RuntimeException("This is not a valid direction for a jump!")
-	 * 			The current direction is not a valid direction for a jump
-	 * 			| Math.PI < getDirection()
 	 */
 	public double getJumpTime() 
-			throws RuntimeException
 	{
 		return getDistance()/(getInitialVelocity() * Math.cos(getDirection()));
 	}
@@ -170,12 +161,8 @@ public class Worm {
 	 * 
 	 * @return	The distance covered by a jump in the current direction and with respect to the worm's
 	 * 			mass, the standard acceleration and the number of remaining action points.
-	 * @throws	RuntimeException("This is not a valid direction for a jump!")
-	 * 			The current direction is not a valid direction for a jump
-	 * 			| Math.PI < getDirection()
 	 */
 	private double getDistance() 
-			throws RuntimeException
 	{
 		return (Math.pow(getInitialVelocity(), 2) * Math.sin(2*getDirection()))/STANDARD_ACCELERATION;
 	}
@@ -184,16 +171,9 @@ public class Worm {
 	/**
 	 * Calculate the initial velocity for a jump with the current amount of action points, the mass
 	 * and the standard acceleration.
-	 * 
-	 * @throws	RuntimeException("This is not a valid direction for a jump!")
-	 * 			The current direction is not a valid direction for a jump
-	 * 			| Math.PI < getDirection()
 	 */
 	private double getInitialVelocity() 
-			throws RuntimeException
 	{
-		if(Math.PI < getDirection())
-			throw new RuntimeException("This is not a valid direction for a jump!");
 		double force = (5.0*(double)getCurrentActionPoints()) + (getMass() * STANDARD_ACCELERATION);
 		return (force/getMass()) * 0.5;
 	}
@@ -216,8 +196,9 @@ public class Worm {
 	public void jump() 
 			throws RuntimeException
 	{
-		double distance = getDistance();
-		setX(getX() + distance);
+		if(Math.PI < getDirection())
+			throw new RuntimeException("This is not a valid direction for a jump!");
+		setX(getX() + getDistance());
 		setCurrentActionPoints(0);
 	}
 	
