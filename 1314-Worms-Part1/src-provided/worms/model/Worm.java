@@ -1,5 +1,9 @@
-// versie: woensdag 12 maart 13:30
+// versie: woensdag 12 maart 14:00
 //method changeRadius? and how about minRadius?
+//TODO method jump may not be possible if the current amount of action points equals zero.
+//TODO illegaldirectionexception invoegen
+//TODO illegalactionpointsException invoegen
+//TODO jump methodes aanpassen met exceptions
 
 package worms.model;
 
