@@ -31,8 +31,7 @@ public class Facade implements IFacade {
 
 	@Override
 	public void jump(Worm worm) {
-		try
-		{
+		try{
 			worm.jump();
 		}
 		catch (IllegalDirectionException x){}
@@ -41,32 +40,26 @@ public class Facade implements IFacade {
 
 	@Override
 	public double getJumpTime(Worm worm) {
-		try
-		{
+		try{
 			return worm.getJumpTime();
 		}
-		catch(IllegalDirectionException x)
-		{
+		catch(IllegalDirectionException x){
 			return 0;
 		}
-		catch(IllegalActionPointsException x)
-		{
+		catch(IllegalActionPointsException x){
 			return 0;
 		}
 	}
 
 	@Override
 	public double[] getJumpStep(Worm worm, double t) {
-		try
-		{
+		try{
 			return worm.getJumpStep(t);
 		}
-		catch(IllegalDirectionException x)
-		{
+		catch(IllegalDirectionException x){
 			return null;
 		}
-		catch(IllegalActionPointsException x)
-		{
+		catch(IllegalActionPointsException x){
 			return null;
 		}
 	}
@@ -118,7 +111,10 @@ public class Facade implements IFacade {
 
 	@Override
 	public void rename(Worm worm, String newName) {
-		worm.setName(newName);
+		try{
+			worm.setName(newName);
+		}
+		catch(IllegalNameException x){}
 	}
 
 	@Override
