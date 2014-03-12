@@ -142,7 +142,7 @@ public class Worm {
 		double horizontalVelocity = getInitialVelocity() * Math.cos(getDirection());
 		double xPosition = getX() + horizontalVelocity * t;
 		double verticalVelocity = getInitialVelocity() * Math.sin(getDirection());
-		double yPosition = getY() + (verticalVelocity*t - (1/2)*STANDARD_ACCELERATION*Math.pow(t,2));
+		double yPosition = getY() + verticalVelocity*t - (STANDARD_ACCELERATION*Math.pow(t,2))/2.0;
 		double[] position = {xPosition, yPosition};
 		return position;
 	}
