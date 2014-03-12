@@ -41,6 +41,8 @@ public class Facade implements IFacade {
 
 	@Override
 	public void turn(Worm worm, double angle) {
+		if(!worm.canTurn(angle))
+			throw new ModelException("You can not turn!");
 		worm.turn(angle);
 	}
 
