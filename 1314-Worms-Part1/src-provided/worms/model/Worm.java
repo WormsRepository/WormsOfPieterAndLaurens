@@ -367,13 +367,13 @@ public class Worm {
 	 * 			|	then result == false
 	 * 			Otherwise, true if and only if the amount of action points needed for such a turn
 	 * 			is smaller than the current amount of action points.
-	 * 			| else result == (getCurrentActionPoints() >= angle / (2*Math.PI) * 60)
+	 * 			| else result == (getCurrentActionPoints() >= (int)(Math.ceil(angle / (2*Math.PI) * 60)))
 	 */
 	public boolean canTurn(double angle) {
 		if(Math.abs(angle) > Math.PI || angle == 0) {
 			return false;
 		}
-		return getCurrentActionPoints() >= angle / (2*Math.PI) * 60;
+		return getCurrentActionPoints() >= (int)(Math.ceil(angle / (2*Math.PI) * 60));
 	}
 
 	/**
@@ -383,12 +383,31 @@ public class Worm {
 	 * 			The angle to turn.
 	 * @pre		The worm must be able to turn with the given angle.
 	 * 		    | canTurn(angle)
-	 * @post	The new direction is equal to the old direction incremented with the given angle.
-	 * 			| new.getDirection() == getDirection() + angle
+	 * @post	The new direction is equal to the old direction incremented with the given angle
+	 * 			and possibly incremented or decremented with two pi.
+	 * 			The new amount of current action points is equal to the old amount 
+	 * 			decremented with the used action points
+	 * 			| new.getCurrentActionPoints == getCurrentActionPoints - (int)(Math.ceil(angle / (2*Math.PI) * 60))
+	 * 			| if ((getDirection() + angle) > 2*Math.PI)
+	 * 			|	then (new.getDirection() == getDirection() + angle - 2*Math.PI)
+	 * 			| else if ((getDirection() + angle) < 0)
+	 * 			|	then (new.getDirection() == getDirection() + angle + 2*Math.PI)
+	 * 			| else
+	 * 			| 	then (new.getDirection() == getDirectin() + angle
+	 * new.getDirection() == setDirection(getDirection() + angle)
+	 * 			
 	 */
 	public void turn(double angle) {
-		direction += angle;
-		//preincrement used correctly?
+		double orientation = getDirection() + angle;
+		if(!isValidDirection(orientation))
+		{
+			if(orientation > 2*Math.PI)
+				orientation -= 2*Math.PI;
+			if(orientation < 0)	
+				orientation += 2*Math.PI;
+		}
+		setDirection(orientation);
+		setCurrentActionPoints(getCurrentActionPoints() - (int)(Math.ceil(angle / (2*Math.PI) * 60)));
 	}
 	
 	/**
