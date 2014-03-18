@@ -1,7 +1,6 @@
-// versie: woensdag 12 maart 14:00
-//method changeRadius? and how about minRadius?
-
-//TODO constructor action points methods...
+//https://github.com/WormsRepository/WormsOfPieterAndLaurens
+// Laurens Loots 	Informatica
+// Pieter Vos		Informatica
 
 package worms.model;
 
