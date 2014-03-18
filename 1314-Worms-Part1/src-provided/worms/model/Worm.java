@@ -9,16 +9,16 @@ import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Model;
 import be.kuleuven.cs.som.annotate.Raw;
 
-// TODO documentation...
 /**
- * A class of worms involving an x-coordinate, an y-coordinate, a direction in radians, a radius (in meter), a name, a mass (in kilogram),
- *  
+ * A class of worms involving an x-coordinate, an y-coordinate, a direction in radians, a radius (in meter),
+ * a minimum radius, a name, a mass (in kilogram), current amount of action points,
+ * maximum amount of action points, a density and the standard acceleration.
+ * @version 1.0
  * @author Laurens Loots, Pieter Vos
  */
 public class Worm {
 	
 	
-	//TODO documentatie constructor nakijken
 	/**
 	 * Create a new worm that is positioned at the given location,
 	 * looks in the given direction, has the given radius, the given name,
@@ -68,9 +68,11 @@ public class Worm {
 	}
 	
 
+	
 	/**
 	 * Return the x-coordinate of the position of the worm (in meter).
 	 */
+	@Basic @Raw
 	public double getX() {
 		return this.x;
 	}
@@ -92,6 +94,7 @@ public class Worm {
 	/**
 	 * Return the y-coordinate of the position of the worm (in meter).
 	 */
+	@Basic @Raw
 	public double getY() {
 		return this.y;
 	}
@@ -120,13 +123,13 @@ public class Worm {
 	 * 			| nbSteps > 0 && 
 	 * 			| currentActionPoints >= Math.ceil((Math.abs(Math.cos(getDirection())) + Math.abs(4*Math.sin(getDirection()))) * nbSteps)
 	 */
+	@Raw
 	public boolean canMove(int nbSteps) 
 	{
 		return nbSteps > 0 && 
 				currentActionPoints >= Math.ceil((Math.abs(Math.cos(getDirection())) + Math.abs(4*Math.sin(getDirection()))) * nbSteps);
 	}
 	
-	//TODO documentation getJumpStep...
 	/**
 	 * Return the position of the worm at a given time in a jump.
 	 * 
@@ -153,10 +156,11 @@ public class Worm {
 		return position;
 	}
 	
-	//TODO documentation...
 	/**
 	 * Calculate the jump time from a jump in the current direction with the number of remaining action points.
 	 * 
+	 * @return	The time needed for a jump in the current state of the worm.
+	 * 			| getDistance()/(getInitialVelocity() * Math.cos(getDirection()))
 	 * @throws	IllegalActionPointsException(0,this)
 	 * 			It is not possible to perform a jump (and have a jump time)
 	 * 			if the amount of current action points is zero.
@@ -172,13 +176,13 @@ public class Worm {
 		return getDistance()/(getInitialVelocity() * Math.cos(getDirection()));
 	}
 	
-	//TODO documentation in formal language? in return clause?
 	/**
 	 * Calculate the distance covered by a jump in the current direction and with respect to the worm's
 	 * mass, the standard acceleration and the number of remaining action points.
 	 * 
 	 * @return	The distance covered by a jump in the current direction and with respect to the worm's
 	 * 			mass, the standard acceleration and the number of remaining action points.
+	 * 			| (Math.pow(getInitialVelocity(), 2) * Math.sin(2*getDirection()))/STANDARD_ACCELERATION
 	 * @throws	IllegalActionPointsException(0,this)
 	 * 			It is not possible to perform a jump (and have a distance for a jump)
 	 * 			if the amount of current action points is zero.
@@ -188,17 +192,20 @@ public class Worm {
 	 * 			if the direction is greater than pi.
 	 * 			| Math.PI < getDirection()
 	 */
+	@Model
 	private double getDistance() 
 			throws IllegalActionPointsException, IllegalDirectionException
 	{
 		return (Math.pow(getInitialVelocity(), 2) * Math.sin(2*getDirection()))/STANDARD_ACCELERATION;
 	}
 	
-	//TODO documentation in return clause?
 	/**
 	 * Calculate the initial velocity for a jump with the current amount of action points, the mass
 	 * and the standard acceleration.
 	 * 
+	 * @return	The initial velocity with a jump in the current state of the worm.
+	 * 			| (((5.0*(double)getCurrentActionPoints()) + (getMass() * STANDARD_ACCELERATION))/
+	 * 			| getMass()) * 0.5
 	 * @throws	IllegalActionPointsException(0,this)
 	 * 			It is not possible to perform a jump (and have an initial velocity for a jump)
 	 * 			if the amount of current action points is zero.
@@ -208,6 +215,7 @@ public class Worm {
 	 * 			if the direction is greater than pi.
 	 * 			| Math.PI < getDirection()
 	 */
+	@Model
 	private double getInitialVelocity() 
 			throws IllegalActionPointsException, IllegalDirectionException
 	{
@@ -219,7 +227,6 @@ public class Worm {
 		return (force/getMass()) * 0.5;
 	}
 	
-//right exception?
 	/**
 	 * Change the position of the worm as the result of a jump from the current position 
 	 * and with respect to the worm's orientation, his mass, the standard acceleration 
@@ -295,6 +302,7 @@ public class Worm {
 	 * Return the radius of this worm.
 	 * 	The radius expresses how big a worm actually is.
 	 */
+	@Basic @Raw
 	public double getRadius() 
 	{
 		return this.radius;
@@ -316,6 +324,7 @@ public class Worm {
 	 * 			| this.setMass()
 	 * 			| this.setMaxActionPoints()
 	 */
+	@Raw
 	public void setRadius(double radius) 
 			throws IllegalRadiusException
 	{
@@ -343,6 +352,7 @@ public class Worm {
 	 * @return	True if and only if the given radius is not below the minimum radius.
 	 * 			| radius >= getMinimalRadius()
 	 */
+	@Raw
 	public boolean canHaveAsRadius(double radius)
 	{
 		return radius >= getMinimalRadius();
@@ -352,6 +362,7 @@ public class Worm {
 	 * Return the variable minRadius of this worm.
 	 * 	The variable minRadius expresses the minimum radius the worm has.
 	 */
+	@Basic @Raw
 	public double getMinimalRadius() 
 	{
 		return this.minRadius;
@@ -363,11 +374,12 @@ public class Worm {
 	 * @param 	minRadius
 	 * 			The new minimum radius of this worm.
 	 * @post	The new minimum radius of this worm is equal to the given minimum radius.
-	 * 			new.getMinimalRadius() == minRadius
+	 * 			| new.getMinimalRadius() == minRadius
 	 * @throws 	IllegalRadiusException(minRadius,this)
 	 * 			The given minimum radius is not a valid radius for any worm.
 	 * 			| (minRadius <= 0)
 	 */
+	@Raw
 	public void setMinimalRadius(double minRadius) 
 			throws IllegalRadiusException
 	{
@@ -388,6 +400,7 @@ public class Worm {
 	 * Return the direction of this worm.
 	 * 	The direction of a worm expresses the orientation the worm has.
 	 */
+	@Basic @Raw
 	public double getDirection() 
 	{
 		return this.direction;
@@ -401,6 +414,7 @@ public class Worm {
 	 * @return	True if and only if the given direction is not below zero and not above or equal to 2 pi.
 	 * 			| result == ( (direction >= 0) && (direction < 2*Math.PI) )
 	 */
+	@Raw
 	public boolean isValidDirection(double direction)
 	{
 		return ( (direction >= 0) && (direction < 2*Math.PI) );
@@ -418,6 +432,7 @@ public class Worm {
 	 * 			is smaller than the current amount of action points.
 	 * 			| else result == (getCurrentActionPoints() >= (int)(Math.ceil(Math.abs(angle) / (2*Math.PI) * 60)))
 	 */
+	@Raw
 	public boolean canTurn(double angle) {
 		if(Math.abs(angle) > Math.PI || angle == 0) {
 			return false;
@@ -467,7 +482,7 @@ public class Worm {
 	 * @post	The new direction of this worm is equal to the given direction.
 	 * 			| new.getDirection() == direction
 	 */
-	@Model
+	@Model @Raw
 	private void setDirection(double direction)
 	{
 		this.direction = direction;
@@ -486,6 +501,7 @@ public class Worm {
 	 * Return the mass of this worm.
 	 * 	The Mass of a worm expresses how heavy a worm is.
 	 */
+	@Basic @Raw
 	public double getMass() 
 	{
 		return this.mass;
@@ -504,6 +520,7 @@ public class Worm {
 	 * 			The given radius is not a valid radius for this worm.
 	 * 			| !canHaveAsRadius(getRadius())
 	 */
+	@Raw
 	private void setMass() 
 			throws IllegalRadiusException
 	{
@@ -548,6 +565,7 @@ public class Worm {
 	 * 			| if(getCurrentActionPoints() > getMaxActionPoints())
 	 * 			|	then(new.getCurrentActionPoints() == new.getMaxActionPoints())
 	 */
+	@Raw @Model
 	private void setMaxActionPoints()
 	{
 		maxActionPoints = Math.round(getMass());
@@ -566,6 +584,7 @@ public class Worm {
 	/**
 	 * Return the current amount of action points of this worm.
 	 */
+	@Basic @Raw
 	public long getCurrentActionPoints() {
 		return this.currentActionPoints;
 	}
@@ -582,7 +601,7 @@ public class Worm {
 	 * 			Else the new amount of current action points is equal to the given amount.
 	 * 			| else (new.getCurrentActionPoints() == newActionPoints)
 	 */
-	@Model
+	@Model @Raw
 	private void setCurrentActionPoints(long newActionPoints){
 		if(newActionPoints < 0 || newActionPoints > getMaxActionPoints())
 			return;
@@ -606,6 +625,7 @@ public class Worm {
 	 * 			starts with an uppercase letter and only uses letters, quates and spaces.
 	 * 			| name.length()>1 && name.substring(0,1).matches("[A-Z]+") && name.matches("[A-Za-z '\"]+")
 	 */
+	@Raw
 	public boolean canHaveAsName(String name)
 	{
 		return name.length()>1 && name.substring(0,1).matches("[A-Z]+") && name.matches("[A-Za-z '\"]+");
@@ -614,6 +634,7 @@ public class Worm {
 	/**
 	 * Return the name of this worm.
 	 */
+	@Basic @Raw
 	public String getName() {
 		return this.name;
 	}
@@ -626,6 +647,7 @@ public class Worm {
 	 * @post	The new name of this worm is equal to the given name.
 	 * 			| new.getName() == name
 	 */
+	@Raw
 	public void setName(String name) 
 			throws IllegalNameException
 	{

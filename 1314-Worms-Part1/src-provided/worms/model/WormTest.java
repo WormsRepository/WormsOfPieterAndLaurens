@@ -5,6 +5,8 @@ import static org.junit.Assert.*;
 import org.junit.*;
 
 /**
+ * A class collecting tests for the class worm.
+ * 
  * @version 1.0
  * @author Pieter en Laurens
  */
@@ -100,6 +102,11 @@ public class WormTest {
 	}
 	
 	@Test
+	public void canMove_NegativeSteps() {
+		assertFalse(wormRadius1.canMove(-1));
+	}
+	
+	@Test
 	public void jump_LegalCase() 
 		throws Exception	{
 		wormDirection2.jump();
@@ -107,6 +114,15 @@ public class WormTest {
 		assertTrue(wormDirection2.getX() < 0);
 		assertTrue(wormDirection2.getCurrentActionPoints() == 0);
 	}
+	
+	@Test(expected = IllegalActionPointsException.class)
+	public void jump_ZeroActionPoints()
+		throws Exception
+	{
+		wormDirection2.jump();
+		wormDirection2.jump();
+	}
+		
 	
 	@Test(expected = RuntimeException.class)
 	public void jump_IllegalDirection()
@@ -138,13 +154,13 @@ public class WormTest {
 	@Test(expected = IllegalRadiusException.class)
 	public void setRadius_IllegalRadius()
 		throws Exception	{
-		wormDirection2.setRadius(0.2);
+		wormDirection2.setRadius(wormDirection2.getMinimalRadius() - 0.02);
 	}
 	
 	@Test
 	public void canHaveAsRadius_LegalCase()
 		throws Exception	{
-		assertTrue(wormDirection2.canHaveAsRadius(0.3));
+		assertTrue(wormDirection2.canHaveAsRadius(wormDirection2.getMinimalRadius() + 0.02));
 	}
 	
 	@Test
@@ -212,6 +228,7 @@ public class WormTest {
 		throws IllegalNameException
 	{
 		wormDirection2.setName("Pieter(Vos)");
+		wormDirection2.setName("Laurens'\" LoOtS");
 	}
 	
 }
